@@ -43,13 +43,13 @@ public class ConsistentHash<T> {
         }
     }
 
-    public T get(Object key) {
+    public T getCache(Object key) {
 //        System.out.println("Circle : " + circle);
 
         if (circle.isEmpty()) {
             return null;
         }
-        int hash = hashFunction.hash(key);
+        int hash = hashFunction.hash(key.toString());
         if (!circle.containsKey(hash)) {
             SortedMap<Integer, T> tailMap =
                     circle.tailMap(hash);
