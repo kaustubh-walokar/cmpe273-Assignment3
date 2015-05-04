@@ -6,8 +6,6 @@ package edu.sjsu.cmpe.cache.client;
  */
 public interface CacheServiceInterface {
     String get(long key);
-
     String getCacheServerUrl();
-
     void put(long key, String value);
 }

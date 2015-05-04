@@ -1,8 +1,11 @@
-package edu.sjsu.cmpe.cache.client;
+package edu.sjsu.cmpe.cache.client.consistent;
 
 /**
  * Created by kaustubh on 03/05/15.
  */
+
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
 
 import java.util.Collection;
 import java.util.SortedMap;
@@ -10,15 +13,15 @@ import java.util.TreeMap;
 
 public class ConsistentHash<T> {
 
-    private final IHashFunction hashFunction;
+    private final HashFunction hashFunction;
     private final int numberOfReplicas;
     private final SortedMap<Integer, T> circle =
             new TreeMap<Integer, T>();
 
-    public ConsistentHash(IHashFunction hashFunction,
+    public ConsistentHash(//HashFunction hashFunction,
                           int numberOfReplicas, Collection<T> nodes) {
 
-        this.hashFunction = hashFunction;
+        this.hashFunction = Hashing.md5();
         this.numberOfReplicas = numberOfReplicas;
 
         for (T node : nodes) {
@@ -30,16 +33,17 @@ public class ConsistentHash<T> {
 
     public void add(T node) {
         for (int i = 0; i < numberOfReplicas; i++) {
-            System.out.println("hash when adding : " + hashFunction.hash(node.toString() + i));
-            circle.put(hashFunction.hash(node.toString() + i),
-                    node);
+            //int hash=hashFunction.hash(node.toString() + i);
+            int hash = hashFunction.newHasher().putString(node.toString() + i).hash().asInt();
+            System.out.println("hash when adding : " + hash);
+            circle.put(hash, node);
 
         }
     }
 
     public void remove(T node) {
         for (int i = 0; i < numberOfReplicas; i++) {
-            circle.remove(hashFunction.hash(node.toString() + i));
+            circle.remove(hashFunction.newHasher().putString(node.toString() + i).hash().asInt());
         }
     }
 
@@ -49,7 +53,7 @@ public class ConsistentHash<T> {
         if (circle.isEmpty()) {
             return null;
         }
-        int hash = hashFunction.hash(key.toString());
+        int hash = hashFunction.newHasher().putString(key.toString()).hash().asInt();
         if (!circle.containsKey(hash)) {
             SortedMap<Integer, T> tailMap =
                     circle.tailMap(hash);

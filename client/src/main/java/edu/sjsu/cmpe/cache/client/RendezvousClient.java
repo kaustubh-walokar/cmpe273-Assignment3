@@ -1,10 +1,15 @@
 package edu.sjsu.cmpe.cache.client;
 
+import edu.sjsu.cmpe.cache.client.rendezvous.RendezvousHash;
+
 import java.util.ArrayList;
 
-public class Client {
+/**
+ * Created by kaustubh on 04/05/15.
+ */
+public class RendezvousClient {
+    public static void main(String[] args) {
 
-    public static void main(String[] args) throws Exception {
         System.out.println("Starting Cache Client...");
         //  CacheServiceInterface cache1 = new DistributedCacheService("http://localhost:3000");
         //  CacheServiceInterface cache2 = new DistributedCacheService("http://localhost:3001");
@@ -13,7 +18,8 @@ public class Client {
         String cache1 = "http://localhost:3000";
         String cache2 = "http://localhost:3001";
         String cache3 = "http://localhost:3002";
-        IHashFunction hashFunction = new CustomIHash();
+
+        // IHashFunction hashFunction = new CustomIHash();
         ArrayList collection = new ArrayList();
         collection.add(cache1);
         collection.add(cache2);
@@ -25,7 +31,7 @@ public class Client {
         System.out.println("---------------------------------------------------------------");
 
 
-        ConsistentHash consistentHash = new ConsistentHash(hashFunction, 1, collection);
+        RendezvousHash<String> consistentHash = new RendezvousHash(collection);
 
         for (int i = 1; i <= 10; i++) {
 
@@ -39,22 +45,17 @@ public class Client {
             //System.out.println("got (" + i + ") => " + value + " from " + cache.toString());
         }
 
-
-
-
         System.out.println("Exiting Cache Client...");
     }
 
-    public static void addToCache(int toAddKey, String toAddValue, ConsistentHash consistentHash) {
-
+    public static void addToCache(int toAddKey, String toAddValue, RendezvousHash consistentHash) {
         String cacheUrl = (String) consistentHash.getCache(toAddKey);
         CacheServiceInterface cache = new DistributedCacheService(cacheUrl);
         cache.put(toAddKey, toAddValue);
         System.out.println("added (" + toAddKey + " => " + toAddValue + ")" + " On " + cache.getCacheServerUrl());
-
     }
 
-    public static Object getFromCache(int key, ConsistentHash consistentHash) {
+    public static Object getFromCache(int key, RendezvousHash consistentHash) {
         String cacheUrl = (String) consistentHash.getCache(key);
         CacheServiceInterface cache = new DistributedCacheService(cacheUrl);
 
