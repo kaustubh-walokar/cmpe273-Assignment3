@@ -44,7 +44,7 @@ public class RendezvousHash<T> {
     }
 
     public T getCache(Object key) {
-        System.out.println("Node List : " + nodeList);
+        //   System.out.println("Node List : " + nodeList);
 
         if (nodeList.isEmpty()) {
             return null;
