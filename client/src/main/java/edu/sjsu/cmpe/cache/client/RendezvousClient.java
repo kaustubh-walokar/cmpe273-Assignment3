@@ -52,14 +52,14 @@ public class RendezvousClient {
         String cacheUrl = (String) consistentHash.getCache(toAddKey);
         CacheServiceInterface cache = new DistributedCacheService(cacheUrl);
         cache.put(toAddKey, toAddValue);
-        System.out.println("added (" + toAddKey + " => " + toAddValue + ")" + " On " + cache.getCacheServerUrl());
+        System.out.println("added (" + toAddKey + " => " + toAddValue + ")" + " On " + cacheUrl);
     }
 
     public static Object getFromCache(int key, RendezvousHash consistentHash) {
         String cacheUrl = (String) consistentHash.getCache(key);
         CacheServiceInterface cache = new DistributedCacheService(cacheUrl);
 
-        System.out.println("got (" + key + ") => " + cache.get(key) + " from " + cache.getCacheServerUrl());
+        System.out.println("got (" + key + ") => " + cache.get(key) + " from " + cacheUrl);
         return cache.get(key);
     }
 }

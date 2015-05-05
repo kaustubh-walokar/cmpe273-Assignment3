@@ -60,6 +60,8 @@ public class ConsistentHash<T> {
             hash = tailMap.isEmpty() ?
                     circle.firstKey() : tailMap.firstKey();
         }
+
+
         System.out.println("\nLocation of " + key + " found at " + hash);
         return circle.get(hash);
     }
