@@ -28,28 +28,24 @@ public class RendezvousHash<T> {
     }
 
     public void add(T node) {
-        // for (int i = 0; i < numberOfReplicas; i++) {
 
         int hash = hashFunction.newHasher().putString(node.toString()).hash().asInt();
         System.out.println("hash when adding : " + hash);
         nodeList.put(hash, node);
 
-        //}
     }
 
     public void remove(T node) {
-        //  for (int i = 0; i < numberOfReplicas; i++) {
+
         nodeList.remove(hashFunction.newHasher().putString(node.toString()).hash().asInt());
-        //  }
+
     }
 
     public T getCache(Object key) {
-        //   System.out.println("Node List : " + nodeList);
 
         if (nodeList.isEmpty()) {
             return null;
         }
-
 
         Integer maxHash = Integer.MIN_VALUE;
         T maxNode = null;

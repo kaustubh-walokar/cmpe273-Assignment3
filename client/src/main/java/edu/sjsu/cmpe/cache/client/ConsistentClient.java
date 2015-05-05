@@ -7,7 +7,8 @@ import java.util.ArrayList;
 public class ConsistentClient {
 
     public static void main(String[] args) throws Exception {
-        System.out.println("Starting Cache Client...");
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("-------------Starting Consistent Cache Client------------------");
 
 
         String cache1 = "http://localhost:3000";
@@ -51,16 +52,18 @@ public class ConsistentClient {
         String cacheUrl = (String) consistentHash.getCache(toAddKey);
         CacheServiceInterface cache = new DistributedCacheService(cacheUrl);
         cache.put(toAddKey, toAddValue);
-        System.out.println("added (" + toAddKey + " => " + toAddValue + ")" + " On " + cacheUrl);
+        System.out.println("put(" + toAddKey + " => " + toAddValue + ")");
+        // System.out.println("added (" + toAddKey + " => " + toAddValue + ")" + " On " + cacheUrl);
 
     }
 
     public static Object getFromCache(int key, ConsistentHashSimpler consistentHash) {
         String cacheUrl = (String) consistentHash.getCache(key);
         CacheServiceInterface cache = new DistributedCacheService(cacheUrl);
-
-        System.out.println("got (" + key + ") => " + cache.get(key) + " from " + cacheUrl);
-        return cache.get(key);
+        String value = cache.get(key);
+        System.out.println("get(" + key + ") => " + value);
+        //System.out.println("got (" + key + ") => " + cache.get(key) + " from " + cacheUrl);
+        return value;
     }
 
 }

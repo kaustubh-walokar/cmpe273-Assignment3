@@ -19,12 +19,7 @@ public class ConsistentHashSimpler<T> {
         this.hashFunction = Hashing.md5();
         nodeList = new ArrayList<T>();
         nodeList.addAll(nodes);
-
-        for (T node : nodes) {
-            add(node);
-        }
-
-        System.out.println("New Circle : " + nodeList);
+        System.out.println("New nodeList : " + nodeList);
 
     }
 

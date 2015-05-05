@@ -10,16 +10,15 @@ import java.util.ArrayList;
 public class RendezvousClient {
     public static void main(String[] args) {
 
-        System.out.println("Starting Cache Client...");
-        //  CacheServiceInterface cache1 = new DistributedCacheService("http://localhost:3000");
-        //  CacheServiceInterface cache2 = new DistributedCacheService("http://localhost:3001");
-        //  CacheServiceInterface cache3 = new DistributedCacheService("http://localhost:3002");
+        System.out.println("---------------------------------------------------------------");
+        System.out.println("-------------Starting Rendezvous Cache Client------------------");
+
 
         String cache1 = "http://localhost:3000";
         String cache2 = "http://localhost:3001";
         String cache3 = "http://localhost:3002";
 
-        // IHashFunction hashFunction = new CustomIHash();
+
         ArrayList collection = new ArrayList();
         collection.add(cache1);
         collection.add(cache2);
@@ -52,14 +51,18 @@ public class RendezvousClient {
         String cacheUrl = (String) consistentHash.getCache(toAddKey);
         CacheServiceInterface cache = new DistributedCacheService(cacheUrl);
         cache.put(toAddKey, toAddValue);
-        System.out.println("added (" + toAddKey + " => " + toAddValue + ")" + " On " + cacheUrl);
+
+        System.out.println("put(" + toAddKey + " => " + toAddValue + ")");
+        //System.out.println("added (" + toAddKey + " => " + toAddValue + ")" + " On " + cacheUrl);
     }
 
     public static Object getFromCache(int key, RendezvousHash consistentHash) {
         String cacheUrl = (String) consistentHash.getCache(key);
         CacheServiceInterface cache = new DistributedCacheService(cacheUrl);
 
-        System.out.println("got (" + key + ") => " + cache.get(key) + " from " + cacheUrl);
-        return cache.get(key);
+        String value = cache.get(key);
+        System.out.println("get(" + key + ") => " + value);
+//        System.out.println("got (" + key + ") => " + cache.get(key) + " from " + cacheUrl);
+        return value;
     }
 }
