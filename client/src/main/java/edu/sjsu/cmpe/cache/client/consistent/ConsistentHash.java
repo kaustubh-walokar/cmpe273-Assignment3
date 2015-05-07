@@ -7,6 +7,7 @@ package edu.sjsu.cmpe.cache.client.consistent;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -34,7 +35,7 @@ public class ConsistentHash<T> {
     public void add(T node) {
         for (int i = 0; i < numberOfReplicas; i++) {
             //int hash=hashFunction.hash(node.toString() + i);
-            int hash = hashFunction.newHasher().putString(node.toString() + i).hash().asInt();
+            int hash = hashFunction.newHasher().putString((node.toString() + i), Charset.defaultCharset()).hash().asInt();
             System.out.println("hash when adding : " + hash);
             circle.put(hash, node);
 
@@ -43,7 +44,7 @@ public class ConsistentHash<T> {
 
     public void remove(T node) {
         for (int i = 0; i < numberOfReplicas; i++) {
-            circle.remove(hashFunction.newHasher().putString(node.toString() + i).hash().asInt());
+            circle.remove(hashFunction.newHasher().putString((node.toString() + i), Charset.defaultCharset()).hash().asInt());
         }
     }
 
@@ -53,7 +54,7 @@ public class ConsistentHash<T> {
         if (circle.isEmpty()) {
             return null;
         }
-        int hash = hashFunction.newHasher().putString(key.toString()).hash().asInt();
+        int hash = hashFunction.newHasher().putString(key.toString(), Charset.defaultCharset()).hash().asInt();
         if (!circle.containsKey(hash)) {
             SortedMap<Integer, T> tailMap =
                     circle.tailMap(hash);

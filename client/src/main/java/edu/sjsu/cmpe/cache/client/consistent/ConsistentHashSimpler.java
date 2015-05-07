@@ -7,6 +7,7 @@ package edu.sjsu.cmpe.cache.client.consistent;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 
 public class ConsistentHashSimpler<T> {
@@ -37,7 +38,7 @@ public class ConsistentHashSimpler<T> {
 
         int bucket = Hashing.consistentHash(
                 hashFunction.newHasher()
-                        .putString(key.toString())
+                        .putString(key.toString(), Charset.defaultCharset())
                         .hash()
                 , nodeList.size());
 

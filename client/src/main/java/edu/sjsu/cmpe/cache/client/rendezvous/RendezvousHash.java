@@ -3,6 +3,7 @@ package edu.sjsu.cmpe.cache.client.rendezvous;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
+import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +30,7 @@ public class RendezvousHash<T> {
 
     public void add(T node) {
 
-        int hash = hashFunction.newHasher().putString(node.toString()).hash().asInt();
+        int hash = hashFunction.newHasher().putString(node.toString(), Charset.defaultCharset()).hash().asInt();
         System.out.println("hash when adding : " + hash);
         nodeList.put(hash, node);
 
@@ -37,7 +38,7 @@ public class RendezvousHash<T> {
 
     public void remove(T node) {
 
-        nodeList.remove(hashFunction.newHasher().putString(node.toString()).hash().asInt());
+        nodeList.remove(hashFunction.newHasher().putString(node.toString(), Charset.defaultCharset()).hash().asInt());
 
     }
 
@@ -52,8 +53,8 @@ public class RendezvousHash<T> {
 
         for (Map.Entry<Integer, T> node : nodeList.entrySet()) {
             int temp = hashFunction.newHasher()
-                    .putString(key.toString())
-                    .putString(node.getValue().toString()).hash().asInt();
+                    .putString(key.toString(), Charset.defaultCharset())
+                    .putString(node.getValue().toString(), Charset.defaultCharset()).hash().asInt();
 
             if (temp > maxHash) {
                 maxHash = temp;
